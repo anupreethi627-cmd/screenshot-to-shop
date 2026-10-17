@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screenshot to Shop</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>Screenshot to Shop</h1>
+        <p>Find similar products from a screenshot</p>
+    </header>
+
+    <main>
+        <form action="/search" method="POST"
+              enctype="multipart/form-data">
+
+            <h2>Find Your Product</h2>
+
+            <label for="image">Upload a product screenshot</label>
+            <input type="file" id="image" name="image"
+                   accept="image/png,image/jpeg,image/webp" required>
+
+            <label for="category">Choose category</label>
+            <select id="category" name="category">
+                <option value="all">All categories</option>
+                <option value="shoes">Shoes</option>
+                <option value="clothing">Clothing</option>
+                <option value="bags">Bags</option>
+            </select>
+
+            <label for="budget">Maximum budget (₹)</label>
+            <input type="number" id="budget" name="budget"
+                   min="0" placeholder="Enter your budget">
+
+            <button type="submit">Find Similar Products</button>
+        </form>
+
+        {% if message %}
+            <div class="message">{{ message }}</div>
+        {% endif %}
+
+        {% if products %}
+            <h2>Matching Products</h2>
+            <div class="products">
+                {% for product in products %}
+                    <article class="product">
+                        <img src="{{ product.image_url }}"
+                             alt="{{ product.name }}">
+                        <h3>{{ product.name }}</h3>
+                        <p>Price: ₹{{ product.price }}</p>
+                        <p>{{ product.difference }}</p>
+                        <p>{{ product.confidence }}</p>
+                        <a href="{{ product.url }}">View Product</a>
+                    </article>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <p class="note">
+            Similarity does not guarantee an exact product match.
+        </p>
+    </main>
+</body>
+</html>
