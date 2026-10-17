@@ -6,6 +6,7 @@ from pathlib import Path
 import json
 
 app = Flask(__name__)
+
 app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -52,8 +53,10 @@ def search():
 
     try:
         budget = float(budget_text) if budget_text else None
+
         if budget is not None and budget < 0:
             raise ValueError
+
     except ValueError:
         return render_template(
             "index.html",
@@ -63,45 +66,61 @@ def search():
 
     try:
         catalog = load_catalog()
-    except (OSError, json.JSONDecodeError):
+
+        if not isinstance(catalog, list):
+            raise ValueError("Catalogue must be a list")
+
+    except (OSError, json.JSONDecodeError, ValueError):
         return render_template(
             "index.html",
             products=[],
             message="Catalogue data could not be loaded."
         )
 
+    # Filter by category
     products = [
         product for product in catalog
         if category == "all"
         or product.get("category") == category
     ]
 
+    # Filter by maximum budget
     if budget is not None:
         products = [
             product for product in products
             if isinstance(product.get("price"), (int, float))
+            and not isinstance(product.get("price"), bool)
             and product["price"] <= budget
         ]
 
+    # Display up to five catalogue products
     products = products[:5]
 
-    # This version filters the catalogue but does not yet
-    # compare the uploaded screenshot with product images.
     results = []
 
     for product in products:
+        image_path = product.get("image", "")
+
         results.append({
             **product,
-            "image_url": "/" + product.get("image", "").lstrip("/"),
-            "difference": product.get("description", "Product details unavailable"),
+            "image_url": "/" + image_path.lstrip("/"),
+            "difference": product.get(
+                "description",
+                "Product details unavailable"
+            ),
             "confidence": "Not yet visually matched"
         })
 
-    message = (
-        "Catalogue results shown. Visual matching is the next step."
-        if results else
-        "No products match these filters. Try another category or budget."
-    )
+    if results:
+        message = (
+            "These products match your filters. "
+            "Visual similarity has not yet been evaluated."
+        )
+    else:
+        message = (
+            "No products match your filters. "
+            "Try another category or increase your budget."
+        )
 
     return render_template(
         "index.html",
