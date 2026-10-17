@@ -1,0 +1,48 @@
+
+[
+  {
+    "id": "SH001",
+    "name": "White Running Shoes",
+    "category": "shoes",
+    "price": 1499,
+    "image": "static/images/white-shoes.jpg",
+    "url": "#",
+    "description": "White sports shoes with a mesh upper"
+  },
+  {
+    "id": "SH002",
+    "name": "Black Running Shoes",
+    "category": "shoes",
+    "price": 1799,
+    "image": "static/images/black-shoes.jpg",
+    "url": "#",
+    "description": "Black sports shoes with a mesh upper"
+  },
+  {
+    "id": "CL001",
+    "name": "Blue Casual T-Shirt",
+    "category": "clothing",
+    "price": 599,
+    "image": "static/images/blue-shirt.jpg",
+    "url": "#",
+    "description": "Blue short-sleeved casual T-shirt"
+  },
+  {
+    "id": "BG001",
+    "name": "Brown Shoulder Bag",
+    "category": "bags",
+    "price": 1299,
+    "image": "static/images/brown-bag.jpg",
+    "url": "#",
+    "description": "Brown shoulder bag for everyday use"
+  },
+  {
+    "id": "BG002",
+    "name": "Black Handbag",
+    "category": "bags",
+    "price": 1999,
+    "image": "static/images/black-bag.jpg",
+    "url": "#",
+    "description": "Black handbag with a simple design"
+  }
+]
